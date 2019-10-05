@@ -1,0 +1,144 @@
+
+class Game {
+   field Player player; // The Player (circle)
+   field Map map; // The Gamemap with borders
+   field int direction;
+   field int counter;
+   field int score;
+
+   /** Constructs a new Game */
+   constructor Game new(int runde) {
+	  var int i;
+	  if (runde=0){
+	  do Output.printString("Hallo in diesem Spiel musst du die kleinen Rechtecke erwischen");
+	  do Output.moveCursor(1,0);
+	  do Output.printString("Steuerung ueber die Pfeiltasten, du kannst zur Seite springen ");
+	  do Output.moveCursor(2,0);
+	  do Output.printString("indem du schnell nach oben und dann zur Seite drueckst.");
+	  do Output.moveCursor(3,0);
+	  do Output.printString("Das Spiel startet automatisch neu bei einem grosses Rechteck");
+	  do Output.moveCursor(4,0);
+	  do Output.printString("Wenn du 5 Punkte gemacht hast gewinnst du. Viel Glueck.");
+	  do Output.moveCursor(5,0);
+	  do Output.moveCursor(6,0);
+	  let i = Keyboard.readInt("Druecke 1 zum starten");
+	  if (i=1){
+		do Screen.clearScreen();
+	  }else{
+		do Output.printString("Falsche Eingabe, neustart noetig");
+		do Sys.wait(20000);
+	  }
+	  }
+      let map = Map.new(); // Creates initial Map
+      let player = Player.new(245,234,true); // Creates inital Player with status alive=true at x=245,y=234
+	  let direction = 0;
+	  let score = 0;
+	  do printScore();
+      return this;
+   }
+   
+   method void printScore(){
+	  do Output.moveCursor(0,13);
+	  do Output.printString("Score: ");
+	  do Output.printInt(score);
+	  return;
+   }
+   
+
+   /** Disposes this game. */
+   method void dispose() {
+      do map.dispose();
+	  do player.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+   
+   /** Moves the player in the current direction. */
+   method void movePlayer() {
+	      var char key;  // the key currently pressed by the user
+      if (direction = 1) { // kind of physics when player is jumping 
+		  let counter = 4;
+		while (counter>0){
+         do player.jump();
+		 let counter=counter-1;
+		 do Sys.wait(1000);
+         let key = Keyboard.keyPressed();
+		if (key = 130) { 
+			do player.moveLeft(10); }
+		if (key = 132) {
+			do player.moveRight(10); }
+		do checkStatus(player.getX(),player.getY(),player.playerStatus());
+		 }
+		 let counter=4;
+		 while (counter>0){
+         do player.fall();
+		 let counter=counter-1;
+		 do Sys.wait(1000);
+         let key = Keyboard.keyPressed();
+		if (key = 130) { 
+			do player.moveLeft(10); }
+		if (key = 132) {
+			do player.moveRight(10); }
+		 }
+      }
+      if (direction = 3) { 
+		do player.moveLeft(1); do Sys.wait(100);}
+      if (direction = 4) { 
+		do player.moveRight(1); do Sys.wait(100);}
+      do Sys.wait(5);  // delays the next movement
+	  do checkStatus(player.getX(),player.getY(),player.playerStatus());
+	  
+      return;
+   }
+   
+   method void checkStatus(int x, int y,boolean status){
+   		if (map.checkForItem(x,y,10) & status){
+			let score=score+1;
+			do printScore();
+		}
+		if (map.checkForWall(x,y,10) & status){
+			do player.playerDead();
+		}
+		return;
+   }
+   
+   
+   
+   /** Runs the game: handles the user's inputs and moves the player accordingly */
+   method boolean run() {
+      var char key;  // the key currently pressed by the user
+      var boolean exit;
+      let exit = false;
+      
+      while (~exit & player.playerStatus()) {
+         // waits for a key to be pressed
+		 
+         if (key = 0) {
+            let key = Keyboard.keyPressed();
+         }
+         if (key = 81)  { let exit = true; }     // q key
+         if (key = 131) { let direction = 1; }   // up arrow
+         if (key = 130) { let direction = 3; }   // left arrow
+         if (key = 132) { let direction = 4; }   // right arrow
+		
+         // waits for the key to be released
+         if (~(key = 0)) {
+			let key = 0;
+            do movePlayer();
+         }
+	 if (score=5){
+	  do Screen.clearScreen();
+	  do Output.printString("DU HAST GEWONNEN!");
+	  do Output.moveCursor(6,6);
+	  do Sys.wait(20000);
+	  do Sys.halt();
+	 }
+     } // while
+	 
+     return false;
+   }
+   
+}
+
+
+

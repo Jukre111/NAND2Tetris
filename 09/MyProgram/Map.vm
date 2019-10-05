@@ -1,0 +1,354 @@
+function Map.new 0
+push constant 7
+call Memory.alloc 1
+pop pointer 0
+call Border.new 0
+pop this 2
+push constant 120
+push constant 220
+push constant 130
+push constant 225
+push constant 0
+call Obstacle.new 5
+pop this 3
+push constant 125
+push constant 205
+push constant 130
+push constant 210
+push constant 0
+not
+call Obstacle.new 5
+pop this 4
+push constant 350
+push constant 220
+push constant 360
+push constant 245
+push constant 0
+call Obstacle.new 5
+pop this 5
+push constant 365
+push constant 205
+push constant 370
+push constant 210
+push constant 0
+not
+call Obstacle.new 5
+pop this 6
+push constant 2
+call Array.new 1
+pop this 0
+push constant 0
+push this 0
+add
+push this 3
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 1
+push this 0
+add
+push this 5
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 2
+call Array.new 1
+pop this 1
+push constant 0
+push this 1
+add
+push this 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 1
+push this 1
+add
+push this 6
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push pointer 0
+return
+function Map.drawBorder 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push constant 0
+push constant 0
+push constant 511
+push constant 10
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+push constant 0
+push constant 10
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 501
+push constant 0
+push constant 511
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+push constant 245
+push constant 511
+push constant 255
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Map.respawnCoin1 0
+push argument 0
+pop pointer 0
+push this 4
+push constant 125
+push constant 205
+push constant 130
+push constant 210
+call Obstacle.changeLocation 5
+pop temp 0
+push constant 0
+return
+function Map.respawnCoin2 0
+push argument 0
+pop pointer 0
+push this 6
+push constant 365
+push constant 205
+push constant 370
+push constant 210
+call Obstacle.changeLocation 5
+pop temp 0
+push constant 0
+return
+function Map.dispose 0
+push argument 0
+pop pointer 0
+push this 2
+call Border.dispose 1
+pop temp 0
+push this 3
+call Obstacle.dispose 1
+pop temp 0
+push this 5
+call Obstacle.dispose 1
+pop temp 0
+push this 4
+call Obstacle.dispose 1
+pop temp 0
+push this 6
+call Obstacle.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Map.checkForWall 4
+push argument 0
+pop pointer 0
+push this 3
+call Obstacle.getX1 1
+pop local 0
+push this 3
+call Obstacle.getX2 1
+pop local 1
+push this 3
+call Obstacle.getY1 1
+pop local 2
+push this 3
+call Obstacle.getY2 1
+pop local 3
+push argument 1
+push local 1
+lt
+push argument 1
+push argument 3
+add
+push local 0
+gt
+and
+push argument 2
+push local 3
+lt
+and
+push argument 2
+push argument 3
+add
+push local 2
+gt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push this 5
+call Obstacle.getX1 1
+pop local 0
+push this 5
+call Obstacle.getX2 1
+pop local 1
+push this 5
+call Obstacle.getY1 1
+pop local 2
+push this 5
+call Obstacle.getY2 1
+pop local 3
+label IF_END0
+push argument 1
+push local 1
+lt
+push argument 1
+push argument 3
+add
+push local 0
+gt
+and
+push argument 2
+push local 3
+lt
+and
+push argument 2
+push argument 3
+add
+push local 2
+gt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+return
+goto IF_END1
+label IF_FALSE1
+push constant 0
+return
+label IF_END1
+function Map.checkForItem 4
+push argument 0
+pop pointer 0
+push this 4
+call Obstacle.getX1 1
+pop local 0
+push this 4
+call Obstacle.getX2 1
+pop local 1
+push this 4
+call Obstacle.getY1 1
+pop local 2
+push this 4
+call Obstacle.getY2 1
+pop local 3
+push argument 1
+push local 1
+lt
+push argument 1
+push argument 3
+add
+push local 0
+gt
+and
+push argument 2
+push local 3
+lt
+push constant 2
+sub
+and
+push argument 2
+push argument 3
+add
+push local 2
+gt
+push constant 2
+sub
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 4
+push constant 510
+push constant 254
+push constant 511
+push constant 255
+call Obstacle.changeLocation 5
+pop temp 0
+push pointer 0
+call Map.respawnCoin2 1
+pop temp 0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push this 6
+call Obstacle.getX1 1
+pop local 0
+push this 6
+call Obstacle.getX2 1
+pop local 1
+push this 6
+call Obstacle.getY1 1
+pop local 2
+push this 6
+call Obstacle.getY2 1
+pop local 3
+label IF_END0
+push argument 1
+push local 1
+lt
+push argument 1
+push argument 3
+add
+push local 0
+gt
+and
+push argument 2
+push local 3
+lt
+push constant 2
+sub
+and
+push argument 2
+push argument 3
+add
+push local 2
+gt
+push constant 2
+sub
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 6
+push constant 510
+push constant 254
+push constant 511
+push constant 255
+call Obstacle.changeLocation 5
+pop temp 0
+push pointer 0
+call Map.respawnCoin1 1
+pop temp 0
+push constant 0
+not
+return
+goto IF_END1
+label IF_FALSE1
+push constant 0
+return
+label IF_END1

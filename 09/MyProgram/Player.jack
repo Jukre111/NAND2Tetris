@@ -1,0 +1,110 @@
+class Player {
+	field int x;
+	field int y;
+	field int velocity;
+	field boolean alive;
+	field int location;
+	field int size;
+	field int counter;
+	
+	
+	/** Constructs a new Player */
+	constructor Player new(int m_x,int m_y,boolean m_alive) {
+		let x = m_x;
+		let y = m_y;
+		let alive = m_alive;
+		let velocity = 1;
+		let size = 10;
+		let counter = 4;
+		do draw();
+		return this;
+	}
+	
+	method void draw() {
+      do Screen.setColor(true);
+      do Screen.drawRectangle(x, y, x + size, y + size);
+		return;
+	}
+		
+		
+	method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+   
+   method void jump() {
+    if (y > 11) {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x, (y + size) - Math.multiply(10,velocity), x + size, y + size);
+        let y = y - Math.multiply(10,velocity);
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x + size, y + Math.multiply(10,velocity));
+	}
+	return;
+   }
+
+   method void fall() {
+	if((y + size) < 245 ) {
+		do Screen.setColor(false);
+		do Screen.drawRectangle(x, y, x + size, y + Math.multiply(10,velocity));
+		let y = y + Math.multiply(10,velocity);
+		do Screen.setColor(true);
+		do Screen.drawRectangle(x, (y + size) - Math.multiply(10,velocity), x + size, y + size);
+	}
+    return;
+   }
+
+   
+   method void moveLeft(int val) {
+         do Screen.setColor(false);
+         do Screen.drawRectangle((x + size) - Math.multiply(val,velocity), y, x + size, y + size);
+         let x = x - Math.multiply(val,velocity);
+      if (x > 11) {
+         do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + Math.multiply(val,velocity), y + size);
+      }
+	  else{
+         let x = x + Math.multiply(val,velocity);
+         do Screen.setColor(true);
+         do Screen.drawRectangle((x + size) - Math.multiply(val,velocity), y, x + size, y + size);
+	  }
+      return;
+   }
+
+   method void moveRight(int val) {
+		 do Screen.setColor(false);
+         do Screen.drawRectangle(x, y, x + Math.multiply(val,velocity), y + size);
+         let x = x + Math.multiply(val,velocity);
+	   if ((x + size) < 500) {
+         do Screen.setColor(true);
+         do Screen.drawRectangle((x + size) - Math.multiply(val,velocity), y, x + size, y + size);
+      }else{   
+         let x = x - Math.multiply(val,velocity);
+		 do Screen.setColor(true);
+         do Screen.drawRectangle(x, y, x + Math.multiply(val,velocity), y + size);
+	  }
+      return;
+   }
+   
+   method int getX(){
+	return x;
+   }
+   
+   method int getY(){
+	return y;
+   }
+   method int getSize(){
+	return size;
+   }
+   
+   method void playerDead(){
+	let alive = false;
+    do Screen.setColor(false);
+    do Screen.drawRectangle(x, y, x + size, y + size);
+	return;
+   }
+   
+   method boolean playerStatus(){
+	return alive;
+   }
+}

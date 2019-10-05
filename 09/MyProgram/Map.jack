@@ -1,0 +1,101 @@
+class Map {
+	field Array walls;
+	field Array coins;
+	field Border border;
+	field Obstacle wall;
+	field Obstacle coin;
+	field Obstacle wall2;
+	field Obstacle coin2;
+	
+	/** Constructs a new Map */
+	constructor Map new() {
+		let border = Border.new();
+		let wall = Obstacle.new(120, 220, 130, 225,false); // dead
+		let coin = Obstacle.new(125, 205, 130, 210,true); // score+1 item
+		let wall2 = Obstacle.new(350, 220, 360, 245,false);// dead
+		let coin2 = Obstacle.new(365, 205, 370, 210,true); // score+1 item
+		let walls = Array.new(2);
+		let walls[0] = wall;
+		let walls[1] = wall2;
+		let coins = Array.new(2);
+		let coins[0] = coin;
+		let coins[1] = coin2;
+		return this;
+	}
+	
+	
+	method void drawBorder() {
+		do Screen.setColor(true);
+		do Screen.drawRectangle(0, 0, 511, 10);
+		do Screen.drawRectangle(0, 0, 10, 255);
+		do Screen.drawRectangle(501, 0, 511, 255);
+		do Screen.drawRectangle(0, 245, 511, 255);
+		return;
+	}
+	
+	method void respawnCoin1(){
+		do coin.changeLocation(125, 205, 130, 210);
+		return;
+	}
+	
+		method void respawnCoin2(){
+		do coin2.changeLocation(365, 205, 370, 210);
+		return;
+	}
+	
+	method void dispose() {
+	  do border.dispose();
+	  do wall.dispose();
+	  do wall2.dispose();
+	  do coin.dispose();
+	  do coin2.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+   
+   method boolean checkForWall(int x, int y,int size){
+	var int x1,x2,y1,y2;
+	let x1 = wall.getX1();
+	let x2 = wall.getX2();
+	let y1 = wall.getY1();
+	let y2 = wall.getY2();
+	if ((x < x2) & ((x+size) > x1) & (y < y2) & ((y+size) > y1)){
+		return true;
+	}else{
+	let x1 = wall2.getX1();
+	let x2 = wall2.getX2();
+	let y1 = wall2.getY1();
+	let y2 = wall2.getY2();
+	}
+	if ((x < x2) & ((x+size) > x1) & (y < y2) & ((y+size) > y1)){
+		return true;
+	}else{
+		return false;
+	}
+   }
+   
+   method boolean checkForItem(int x, int y,int size){
+	var int x1,x2,y1,y2;
+	let x1 = coin.getX1();
+	let x2 = coin.getX2();
+	let y1 = coin.getY1();
+	let y2 = coin.getY2();
+	if ((x < x2) & ((x+size) > x1) & (y < y2-2) & ((y+size) > y1-2)){
+		do coin.changeLocation(510,254,511,255);
+		do respawnCoin2();
+		return true;
+	}else{
+	let x1 = coin2.getX1();
+	let x2 = coin2.getX2();
+	let y1 = coin2.getY1();
+	let y2 = coin2.getY2();
+	}
+	if ((x < x2) & ((x+size) > x1) & (y < y2-2) & ((y+size) > y1-2)){
+		do coin2.changeLocation(510,254,511,255);
+		do respawnCoin1();
+		return true;
+	}else{
+		return false;
+	}
+   }
+}

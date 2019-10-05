@@ -1,0 +1,56 @@
+class Obstacle {
+	field boolean destroyable;
+	field int x1,y1,x2,y2;
+	/** Constructs a new Obstacle */
+	constructor Obstacle new(int m_x1,int m_y1,int m_x2,int m_y2,boolean m_destroyable) {
+		let x1 = m_x1;
+		let x2 = m_x2;
+		let y1 = m_y1;
+		let y2 = m_y2;
+		do draw(x1,y1,x2,y2);
+		let destroyable = m_destroyable;
+		return this;
+	}
+	
+	method void draw(int x1,int y1,int x2,int y2) {
+		do Screen.setColor(true);
+		do Screen.drawRectangle(x1,y1,x2,y2);
+		return;
+	}
+		
+	method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+   
+   method int getX1(){
+	return x1;
+   }
+   
+   method int getY1(){
+	return y1;
+   }   
+   
+   method int getX2(){
+	return x2;
+   }
+   
+   method int getY2(){
+	return y2;
+   }
+   
+   method boolean destroyable(){
+	return destroyable;
+   }
+   
+   method void changeLocation(int a1,int b1,int a2,int b2){
+	do Screen.setColor(false);
+	do Screen.drawRectangle(x1,y1,x2,y2);
+		let x1 = a1;
+		let x2 = a2;
+		let y1 = b1;
+		let y2 = b2;
+	do draw(a1,b1,a2,b2);
+	return;
+   }
+}

@@ -1,0 +1,24 @@
+class Border {
+	field int unused;
+	
+	/** Constructs a new Gameborder */
+	constructor Border new() {
+		do draw();
+		return this;
+	}
+	
+	method void draw() {
+		do Screen.setColor(true);
+		do Screen.drawRectangle(0, 0, 511, 10);
+		do Screen.drawRectangle(0, 0, 10, 255);
+		do Screen.drawRectangle(501, 0, 511, 255);
+		do Screen.drawRectangle(0, 245, 511, 255);
+		return;
+	}
+		
+	method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+	
+}
